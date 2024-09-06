@@ -1,0 +1,120 @@
+/* General Responsive Styles */
+@media screen and (max-width: 1200px) {
+    .dashboardLayout {
+      gap: 30px;
+    }
+  
+    .homepage {
+      flex-direction: column;
+      gap: 20px;
+    }
+  
+    .homepage .left h1 {
+      font-size: 100px;
+    }
+  
+    .homepage .right .imgContainer {
+      width: 90%;
+      height: 60%;
+    }
+  }
+  
+  @media screen and (max-width: 992px) {
+    .dashboardLayout {
+      flex-direction: column;
+    }
+  
+    .dashboardLayout .menu, 
+    .dashboardLayout .content {
+      flex: none;
+      width: 100%;
+    }
+  
+    .homepage .left h1 {
+      font-size: 80px;
+    }
+  
+    .homepage .right .imgContainer {
+      width: 100%;
+      height: 70%;
+    }
+  }
+  
+  @media screen and (max-width: 768px) {
+    .dashboardPage .texts {
+      width: 80%;
+    }
+  
+    .dashboardPage .formContainer {
+      width: 100%;
+    }
+  
+    .homepage .left h1 {
+      font-size: 60px;
+    }
+  
+    .homepage .right .imgContainer {
+      width: 100%;
+      height: 80%;
+    }
+  
+    .homepage .right .chat {
+      display: none;
+    }
+  }
+  
+  @media screen and (max-width: 576px) {
+    .newForm {
+      width: 100%;
+      padding: 10px;
+    }
+  
+    .newForm .imagePreview img {
+      width: 80px;
+    }
+  
+    .chatList .title {
+      font-size: 8px;
+    }
+  
+    .homepage .left h1 {
+      font-size: 40px;
+    }
+  
+    .homepage .right .imgContainer {
+      width: 100%;
+      height: 90%;
+    }
+  
+    .homepage .right .chat {
+      display: none;
+    }
+  }
+  
+  @media screen and (max-width: 360px) {
+    .homepage .left h1 {
+      font-size: 32px;
+    }
+  
+    .homepage .left h3 {
+      font-size: 12px;
+    }
+  
+    .homepage .left a {
+      font-size: 12px;
+      padding: 10px 20px;
+    }
+  
+    .newForm {
+      padding: 5px;
+    }
+  
+    .newForm input {
+      padding: 10px;
+    }
+  
+    .newForm button, .newForm label {
+      padding: 5px;
+    }
+  }
+  
