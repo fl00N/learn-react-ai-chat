@@ -43,12 +43,6 @@ app.post("/api/chats", ClerkExpressRequireAuth(), async (req, res) => {
 
     const savedChat = await newChat.save();
 
-    res.cookie('your_cookie_name', 'cookie_value', {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'None',
-    });
-
     const userChats = await UserChats.find({ userId: userId });
 
     if (!userChats.length) {
