@@ -2,16 +2,16 @@ import { Link } from "react-router-dom";
 import "./ChatList.css";
 import { useQuery } from "@tanstack/react-query";
 import { SignedIn, UserButton } from "@clerk/clerk-react";
-import useFetch from "../../hooks/authenticatedFetchHook";
+import useAuthFetch from "../../hooks/authenticatedFetchHook";
 
 const ChatList = () => {
 
-  const fetch = useFetch()
+  const authFetch = useAuthFetch()
 
   const { isPending, error, data } = useQuery({
     queryKey: ["userChats"],
     queryFn: () =>
-      fetch(`${import.meta.env.VITE_API_URL}/api/userchats`, {
+      authFetch(`${import.meta.env.VITE_API_URL}/api/userchats`, {
         credentials: "include",
       }).then((res) => res.json()),
   });

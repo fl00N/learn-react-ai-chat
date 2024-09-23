@@ -1,12 +1,16 @@
 import { IKContext, IKImage, IKUpload } from "imagekitio-react";
 import { useRef } from "react";
+import useAuthFetch from "../../hooks/authenticatedFetchHook";
 
 const urlEndpoint = import.meta.env.VITE_IMAGE_KIT_ENDPOINT;
 const publicKey = import.meta.env.VITE_IMAGE_KIT_PUBLIC_KEY;
 
 const authenticator = async () => {
+
+  const authFetch = useAuthFetch()
+
   try {
-    const response = await fetch("http://localhost:3000/api/upload");
+    const response = await authFetch("http://localhost:3000/api/upload");
 
     if (!response.ok) {
       const errorText = await response.text();

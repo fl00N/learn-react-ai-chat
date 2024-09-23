@@ -1,13 +1,13 @@
-import { useAuth } from '@clerk/nextjs'
-
-export default function useFetch() {
-  const { getToken } = useAuth()
-
-  const authenticatedFetch = async (...args) => {
-    return fetch(...args, {
-      headers: { Authorization: `Bearer ${await getToken()}` },
-    }).then((res) => res.json())
+export default function useAuthFetch() {
+  
+  const authenticatedFetch = async (url, options) => {
+    return fetch(url, {
+      ...options,
+      headers: { Authorization: `Bearer ${await Clerk.session.getToken()}` },
+    })
   }
+
+  console.log(Clerk.session);
 
   return authenticatedFetch
 }

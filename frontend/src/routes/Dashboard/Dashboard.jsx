@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import "./Dashboard.css";
+import useAuthFetch from "../../hooks/authenticatedFetchHook";
 
 const Dashboard = () => {
   const [isSmallScreen, setIsSmallScreen] = useState(false);
@@ -15,9 +16,11 @@ const Dashboard = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
+  const authFetch = useAuthFetch()
+
   const mutation = useMutation({
     mutationFn: (text) => {
-      return fetch(`${import.meta.env.VITE_API_URL}/api/chats`, {
+      return authFetch(`${import.meta.env.VITE_API_URL}/api/chats`, {
         method: "POST",
         credentials: "include",
         headers: {
