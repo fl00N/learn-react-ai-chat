@@ -1,20 +1,15 @@
 import express from "express";
 import cors from "cors";
-import path from "path";
-import { fileURLToPath } from "url";
 import ImageKit from "imagekit";
 import Chat from "./models/chat.js";
 import UserChats from "./models/userChats.js";
 import { ClerkExpressRequireAuth } from "@clerk/clerk-sdk-node";
-import connectDB from './config/mongodb.js'
+import connectDB from './config/mongodb.js';
 
 const port = process.env.PORT || 3000;
 const app = express();
 
-connectDB()
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+connectDB();
 
 app.use(
   cors({
@@ -36,12 +31,11 @@ app.get("/api/upload", (req, res) => {
   res.send(result);
 });
 
-app.post("/api/chats", ClerkExpressRequireAuth(), async (req, res) => {
+app.post("/api/chats", ClerkExpressRequireAuth(), async (req, res, next) => {
   const userId = req.auth.userId;
   const { text } = req.body;
 
   try {
-    // CREATE A NEW CHAT
     const newChat = new Chat({
       userId: userId,
       history: [{ role: "user", parts: [{ text }] }],
@@ -49,10 +43,8 @@ app.post("/api/chats", ClerkExpressRequireAuth(), async (req, res) => {
 
     const savedChat = await newChat.save();
 
-    // CHECK IF THE USERCHATS EXISTS
     const userChats = await UserChats.find({ userId: userId });
 
-    // IF DOESN'T EXIST CREATE A NEW ONE AND ADD THE CHAT IN THE CHATS ARRAY
     if (!userChats.length) {
       const newUserChats = new UserChats({
         userId: userId,
@@ -66,7 +58,6 @@ app.post("/api/chats", ClerkExpressRequireAuth(), async (req, res) => {
 
       await newUserChats.save();
     } else {
-      // IF EXISTS, PUSH THE CHAT TO THE EXISTING ARRAY
       await UserChats.updateOne(
         { userId: userId },
         {
@@ -79,15 +70,15 @@ app.post("/api/chats", ClerkExpressRequireAuth(), async (req, res) => {
         }
       );
 
-      res.status(201).send(newChat._id);
+      res.status(201).send(savedChat._id);
     }
   } catch (err) {
     console.log(err);
-    res.status(500).send("Error creating chat!");
+    next(err);
   }
 });
 
-app.get("/api/userchats", ClerkExpressRequireAuth(), async (req, res) => {
+app.get("/api/userchats", ClerkExpressRequireAuth(), async (req, res, next) => {
   const userId = req.auth.userId;
 
   try {
@@ -96,11 +87,11 @@ app.get("/api/userchats", ClerkExpressRequireAuth(), async (req, res) => {
     res.status(200).send(userChats[0].chats);
   } catch (err) {
     console.log(err);
-    res.status(500).send("Error fetching userchats!");
+    next(err);
   }
 });
 
-app.get("/api/chats/:id", ClerkExpressRequireAuth(), async (req, res) => {
+app.get("/api/chats/:id", ClerkExpressRequireAuth(), async (req, res, next) => {
   const userId = req.auth.userId;
 
   try {
@@ -109,11 +100,11 @@ app.get("/api/chats/:id", ClerkExpressRequireAuth(), async (req, res) => {
     res.status(200).send(chat);
   } catch (err) {
     console.log(err);
-    res.status(500).send("Error fetching chat!");
+    next(err)
   }
 });
 
-app.put("/api/chats/:id", ClerkExpressRequireAuth(), async (req, res) => {
+app.put("/api/chats/:id", ClerkExpressRequireAuth(), async (req, res, next) => {
   const userId = req.auth.userId;
 
   const { question, answer, img } = req.body;
@@ -139,15 +130,17 @@ app.put("/api/chats/:id", ClerkExpressRequireAuth(), async (req, res) => {
     res.status(200).send(updatedChat);
   } catch (err) {
     console.log(err);
-    res.status(500).send("Error adding conversation!");
+    next(err);
   }
 });
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(401).send("Unauthenticated!");
+  res.status(500).send("Something went wrong!");
 });
 
+app.get('/', (req, res) => res.send('API Working'))
+
 app.listen(port, () => {
-    console.log("Server running on 3000");
+  console.log(`Server running on port ${port}`);
 });
