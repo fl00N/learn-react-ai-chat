@@ -2,8 +2,12 @@ import { Link } from "react-router-dom";
 import "./ChatList.css";
 import { useQuery } from "@tanstack/react-query";
 import { SignedIn, UserButton } from "@clerk/clerk-react";
+import useFetch from "../../hooks/authenticatedFetchHook";
 
 const ChatList = () => {
+
+  const fetch = useFetch()
+
   const { isPending, error, data } = useQuery({
     queryKey: ["userChats"],
     queryFn: () =>
