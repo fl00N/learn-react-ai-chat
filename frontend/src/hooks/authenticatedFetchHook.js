@@ -7,7 +7,5 @@ export default function useAuthFetch() {
     })
   }
 
-  console.log(Clerk.session);
-
   return authenticatedFetch
 }
