@@ -14,9 +14,7 @@ connectDB()
 app.use(
   cors({
     origin: process.env.CLIENT_URL,
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"]
+    credentials: true
   })
 );
 
@@ -44,6 +42,12 @@ app.post("/api/chats", ClerkExpressRequireAuth(), async (req, res) => {
     });
 
     const savedChat = await newChat.save();
+
+    res.cookie('your_cookie_name', 'cookie_value', {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'None',
+    });
 
     const userChats = await UserChats.find({ userId: userId });
 
