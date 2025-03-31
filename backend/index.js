@@ -4,17 +4,17 @@ import ImageKit from "imagekit";
 import Chat from "./models/chat.js";
 import UserChats from "./models/userChats.js";
 import { ClerkExpressRequireAuth } from "@clerk/clerk-sdk-node";
-import connectDB from './config/mongodb.js'
+import connectDB from "./config/mongodb.js";
 
 const port = process.env.PORT || 3000;
 const app = express();
 
-connectDB()
+connectDB();
 
 app.use(
   cors({
     origin: process.env.CLIENT_URL,
-    credentials: true
+    credentials: true,
   })
 );
 
@@ -24,7 +24,7 @@ const imagekit = new ImageKit({
   urlEndpoint: process.env.IMAGE_KIT_ENDPOINT,
   publicKey: process.env.IMAGE_KIT_PUBLIC_KEY,
   privateKey: process.env.IMAGE_KIT_PRIVATE_KEY,
-})
+});
 
 app.get("/api/upload", (req, res) => {
   const result = imagekit.getAuthenticationParameters();
@@ -139,10 +139,10 @@ app.use((err, req, res, next) => {
   res.status(401).send("Unauthenticated!");
 });
 
-app.get('/', (req, res) => res.send('API Working'))
+app.get("/", (req, res) => res.send("API Working"));
 
 app.listen(port, () => {
-    console.log("Server running on 3000");
+  console.log("Server running on 3000");
 });
 
-export default app
+export default app;
